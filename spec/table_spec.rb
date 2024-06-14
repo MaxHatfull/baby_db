@@ -22,6 +22,7 @@ describe Table do
   it "does not find a row by id" do
     table = Table.new
     row = Row.new
+    table.add_row(row)
     expect(table.find(row.id + 42)).to be_nil
   end
 
