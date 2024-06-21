@@ -9,6 +9,20 @@ class Table
     row.id = @next_id
     @next_id += 1
     rows << row
+    indexes.each do |_, index|
+      index.add(row)
+    end
+  end
+
+  def add_index(column)
+    indexes[column] = Index.new(column)
+    rows.each do |row|
+      indexes[column].add(row)
+    end
+  end
+
+  def indexes
+    @indexes ||= {}
   end
 
   def row_count
@@ -20,7 +34,9 @@ class Table
   end
 
   def find_by(column, value)
-      rows.find { |row| row[column] == value }
+    return indexes[column].find(value) if indexes.key?(column)
+
+    rows.find { |row| row[column] == value }
   end
 
   def find_all_by(column, value)

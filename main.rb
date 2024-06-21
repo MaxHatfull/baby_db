@@ -2,17 +2,21 @@
 
 require_relative 'table'
 require_relative 'row'
+require_relative 'index'
 require "benchmark"
 
 table = Table.new
-1000000.times do
-  table.add_row(Row.new)
+table.add_index(:name)
+10_000_000.times do
+  row = Row.new
+  row[:name] = rand(100_000).to_s
+  table.add_row(row)
 end
 
 Benchmark.benchmark do |x|
-  x.report("Find") do
+  x.report("Find By") do
     100.times do
-      table.find(rand(1000000))
+      table.find_by(:name, rand(100_000).to_s)
     end
   end
 end

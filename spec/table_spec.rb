@@ -2,6 +2,7 @@
 
 require_relative '../table'
 require_relative '../row'
+require_relative '../index'
 
 describe Table do
   it "counts the row" do
@@ -51,5 +52,33 @@ describe Table do
     row2[:name] = "John"
     table.add_row(row2)
     expect(table.find_all_by(:name, "John")).to eq [row1, row2]
+  end
+
+  it "successfully adds an index" do
+    table = Table.new
+    row1 = Row.new
+    row1[:name] = "John"
+    row2 = Row.new
+    row2[:name] = "Jane"
+    row3 = Row.new
+    table.add_row(row1)
+    table.add_row(row2)
+    table.add_row(row3)
+    table.add_index(:name)
+    expect(table.indexes[:name]).to be_a(Index)
+  end
+
+  it "finds a row by an indexed column" do
+    table = Table.new
+    row1 = Row.new
+    row1[:name] = "John"
+    row2 = Row.new
+    row2[:name] = "Jane"
+    table.add_row(row1)
+    table.add_row(row2)
+    table.add_index(:name)
+
+    expect(table.indexes[:name]).to receive(:find).with("John").and_call_original
+    expect(table.find_by(:name, "John")).to eq row1
   end
 end
