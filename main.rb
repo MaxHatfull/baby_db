@@ -9,14 +9,14 @@ table = Table.new
 table.add_index(:name)
 10_000_000.times do
   row = Row.new
-  row[:name] = rand(100_000).to_s
+  row[:name] = rand(10_000_000).to_s
   table.add_row(row)
 end
 
 Benchmark.benchmark do |x|
   x.report("Find By") do
     100.times do
-      table.find_by(:name, rand(100_000).to_s)
+      table.find_by(:name, rand(10_000_000).to_s)
     end
   end
 end

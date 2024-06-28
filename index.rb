@@ -43,7 +43,7 @@ module IndexTree
     end
 
     def find(value)
-      if value <= @center
+      if value < @center
         @left.find(value)
       else
         @right.find(value)
